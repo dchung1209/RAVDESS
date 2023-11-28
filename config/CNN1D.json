@@ -1,5 +1,5 @@
 {
-    "model" : "CNN16",
+    "model" : "1DCNN",
 
     "optimizer" : {
         "type": "Adam",

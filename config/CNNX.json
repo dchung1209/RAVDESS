@@ -1,0 +1,14 @@
+"Optimizer" : {
+    "type": "Adam",
+    "args": {
+        "lr": 0.0001,
+    }
+},
+
+"Loss" : {
+    "type" : "CrossEntropyLoss"
+},
+
+"Trainer" : {
+    "epoch" : 20
+}

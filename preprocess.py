@@ -1,49 +1,42 @@
-import librosa
-import librosa.display
+from torch.utils.data import Dataset, DataLoader, RandomSampler
+import torchvision.transforms as transforms
+import torch
 import os
-import pandas as pd
+from utilities import RAVDESS, ToMelSpec
 
-path = "/content/drive/MyDrive/RAVDESS"
-random_seed = 41
-emotions = {'01' : 'Neutral', '02' : 'Calm', '03' : 'Happy',  '04' : 'Sad',
-              '05' : 'Angry', '06' : 'Fearful', '07' : 'Disgust', '08' : 'Surprised'}
-level = {'01' : 'Normal', '02' : 'Strong'}
-statement = {'01' : 'Kids are talking by the door' , '02' : 'Dogs are sitting by the door'}
+class RAVDESS_Dataset(Dataset):
+  def __init__(self, x, y, transform, train = True):
+    self.emotion = y.to_list()
+    self.path = x.to_list()
+    self.transform = transform
 
-def GenderClassifier(x):
-  x = int(x)
-  if (x % 2 == 0):
-    return "Female"
-  return "Male"
+  def __len__(self):
+    return len(self.emotion)
 
-class Preprocess():
-  def __init__(self, random_seed, dir):
-    self.seed = random_seed
-    self.dir = dir
-
-    self.emotion = []
-    self.id = []
-    self.intensity = []
-    self.sentence = []
-    self.path = []
-
-  def load(self):
-      for dirname, _, filenames in os.walk(self.dir):
-        for filename in filenames:
-          self.path.append(os.path.join(dirname, filename))
-          Sequence = filename.split('-')
-          self.emotion.append(Sequence[2])
-          self.intensity.append(Sequence[3])
-          self.sentence.append(Sequence[4])
-          self.append(Sequence[6].split('.')[0])
-  
-  def topd(self):
-    df = pd.DataFrame({'ID' : self.id, 'Emotion' : self.emotion, 
-                       'Intensity' : self.intensity, 'Statement' : self.sentence, 'Path' : self.path})
-    df['Emotion'] = df['Emotion'].map(emotions)
-    df['Intensity'] = df['Intensity'].map(level)
-    df['Statement'] = df['Statement'].map(statement)
-    df['Gender'] = df['ID'].apply(lambda x : GenderClassifier(x))
-    return df
+  def __getitem__(self, idx):
+    spec = self.transform(np.uint8(self.path[idx]))
+    y = self.emotion[idx]
+    return spec, y
 
 
+class DataModule():
+    def __init__(self, root, channel_num, transform):
+      self.root = root
+      self.channel_num = channel_num
+      self.transform = transform
+      self.dataloader = RAVDESS(self.root)
+    
+    def mel_transform(self):
+      Mels = ToMelSpec.MelSpec(self.dataloader)
+      if (self.channel_num == 1):
+        Mels['Path'] = Mels['Path'].apply(lambda x: x[..., 0])
+      return Mels
+    
+    def split_dataloader(self, actor_id = []):
+      return self.dataloader[self.dataloader['ID'].isin(actor_id)]  
+    
+    def get_dataloader(self):
+      dataset = RAVDESS_Dataset(x, y, self.transform, True)
+      sampler = RandomSampler(dataset, generator=torch.Generator().manual_seed(41))
+      dataloader = DataLoader(dataset, batch_size=32, sampler=sampler)
+      return dataloader

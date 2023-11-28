@@ -56,6 +56,3 @@ class CNN16(nn.Module):
     x = self.fc_layer2(x)
     return x
 
-
-model = CNN16()
-

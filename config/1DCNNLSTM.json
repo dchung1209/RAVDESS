@@ -1,14 +1,12 @@
-"Optimizer" : {
-    "type": "Adam",
-    "args": {
-        "lr": 0.0001,
-    }
-},
+{
+    "model" : "1DCNNLSTM",
 
-"Loss" : {
-    "type" : "CrossEntropyLoss"
-},
+    "optimizer" : {
+        "type": "Adam",
+        "lr": 0.0001
+    },
 
-"Trainer" : {
+    "loss" : "CrossEntropyLoss",
+
     "epoch" : 20
 }

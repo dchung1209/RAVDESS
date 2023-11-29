@@ -6,8 +6,12 @@ class Trainer:
         self.dataloader = dataloader
         self.optimizer = optimizer
         self.loss = loss
-        self.accuracy = accuracy
         self.device = torch.device("cuda")
+
+    def accuracy(self, y_pred, y_true):
+        correct = torch.eq(y_true, y_pred).sum().item()
+        acc = (correct / len(y_pred)) * 100
+        return acc
 
     def train_step(self):
         train_loss = 0.0
@@ -56,6 +60,6 @@ class Trainer:
         test_loss /= len(self.dataloader)
         test_acc /= len(self.dataloader)
         print(f"Test loss: {test_loss:.5f} | Test accuracy: {test_acc:.2f}%\n")
-        
+
         return test_loss
     

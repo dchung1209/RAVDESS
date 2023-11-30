@@ -55,4 +55,3 @@ class CNN16(nn.Module):
     x = self.dropout2(self.fc_layer1(x))
     x = self.fc_layer2(x)
     return x
-

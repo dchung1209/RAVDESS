@@ -1,5 +1,5 @@
 {
-    "model" : "CNNX",
+    "model" : "VGG19",
 
     "optimizer" : {
         "type": "Adam",
@@ -9,5 +9,5 @@
 
     "loss" : "CrossEntropyLoss",
 
-    "epoch" : 60
+    "epoch" : 30
 }

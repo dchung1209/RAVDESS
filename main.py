@@ -55,10 +55,11 @@ if __name__ == "__main__":
             transforms.ToPILImage(),
             transforms.Resize(size=(128, 256)),
             transforms.ToTensor()])
-    module = DataModule("c:\Users\dchung\Downloads\archive (1)", 1, )
+    module = DataModule(r"c:\Users\dchung\Downloads\archive (1)", 1, transform)
     module.transform_dataframe()
     actor = [x for x in range(1, 25)]
 
+    """
     if (config.read()):
         kf = KFold(n_splits=4, shuffle=True, random_state = 351)
         model_module = importlib.import_module(f"model.{config.get_model()}")
@@ -79,6 +80,7 @@ if __name__ == "__main__":
                 print(f"epoch {epoch + 1}: ")
                 instance.train_step(train_dataloader)
                 instance.eval_step(valid_dataloader)
+                """
     
 
         

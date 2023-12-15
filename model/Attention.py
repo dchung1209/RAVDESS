@@ -21,3 +21,4 @@ class Attention(nn.Module):
     out = out.transpose(-1, -2)
     output = torch.sum(out, dim=2)
     return output
+  

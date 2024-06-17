@@ -31,6 +31,7 @@ This project aims to develop an emotional recognition system using the Ryerson A
 ### Alexnet
 
 
+
 ## Results
 
 *Training from Scratch*
@@ -49,3 +50,7 @@ This project aims to develop an emotional recognition system using the Ryerson A
 | VGG19 + Attn   | 65.28%   | 66.42%    | 65.10% | 64.43%   |
 | ResNet         | 57.01%   | 57.02%    | 56.32% | 55.89%   |
 | AlexNet + Attn | 55.62%   | 55.24%    | 54.69% | 53.81%   |
+
+*Observation*
+
+Many results differ from the experimental outcomes. Some experiments did not consider speaker independence, often leading to overfitting. They mixed the voices, resulting in seemingly good but misleading results.
